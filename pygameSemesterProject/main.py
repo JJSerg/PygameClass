@@ -1,3 +1,5 @@
+from random import randrange
+
 import pygame
 
 
@@ -25,12 +27,20 @@ class Ship(pygame.sprite.Sprite):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT] or keys[pygame.K_a]:
             self.rect.x -= 2
+            if self.rect.left < 0:
+                self.rect.left = 0
         elif keys[pygame.K_RIGHT] or keys[pygame.K_d]:
             self.rect.x += 2
+            if self.rect.right > 700:
+                self.rect.right = 700
         elif keys[pygame.K_UP] or keys[pygame.K_w]:
             self.rect.y -= 2
+            if self.rect.top < 50:
+                self.rect.top = 50
         elif keys[pygame.K_DOWN] or keys[pygame.K_s]:
             self.rect.y += 2
+            if self.rect.bottom > 600:
+                self.rect.bottom = 600
 
     def update(self):
         self.move_ship()
@@ -42,13 +52,25 @@ class Missile(pygame.sprite.Sprite):
         self.image = load_image('images/Missile_1_Flying_000.png')
         self.image = pygame.transform.rotate(self.image, 270)
         self.image = pygame.transform.scale(self.image, (150, 45))
-        self.rect = self.image.get_rect(topleft=(0, 50))
+        self.rect = self.image.get_rect(topleft=(0, randrange(50, 600)))
 
     def fire_missile(self):
         self.rect.x += 1
 
     def update(self):
         self.fire_missile()
+        self.destroy()
+
+    def destroy(self):
+        if self.rect.right > 701:
+            self.kill()
+
+
+def collision():
+    if pygame.sprite.spritecollide(ship.sprite, missiles.sprites(), False):
+        return False
+    else:
+        return True
 
 
 pygame.init()
@@ -86,5 +108,7 @@ while True:
         ship.update()
         missiles.draw(screen)
         missiles.update()
+        game_active = collision()
+
     pygame.display.update()
     clock.tick(60)
