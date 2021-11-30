@@ -111,7 +111,7 @@ ship.add(Ship())
 missiles = pygame.sprite.Group()
 missiles.add(Missile())
 # Setting up a UI to get user input for difficulty
-
+options = [Option("2 Squares", (100,105)), Option("3 Squares", (200, 205))]
 
 while True:
     for event in pygame.event.get():
