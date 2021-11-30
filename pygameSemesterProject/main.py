@@ -3,24 +3,41 @@ from random import randrange
 import pygame
 
 
+def get_player_difficulty():
+    choice = int(input('Please choose a ship size:'))
+    if 2 <= choice <= 5:
+        return choice
+    else:
+        print('invalid choice')
+        get_player_difficulty()
+
+
+def set_difficulty(num):
+    num = get_player_difficulty()
+
+
+def choose_ship():
+    return load_image(f'images/ship_h_{get_player_difficulty()}.png')
+
+
 def load_image(image_name):
     image = pygame.image.load(f'{image_name}').convert_alpha()
     return image
 
 
 # for now this only loads horizontal ships
-def load_ships():
-    ship2 = load_image('images/ship_h_two.png')
-    ship3 = load_image('images/ship_h_three.png')
-    ship4 = load_image('images/ship_h_four.png')
-    ship5 = load_image('images/ship_h_five.png')
-    return ship2, ship3, ship4, ship5
+# def load_ships():
+#     ship2 = load_image('images/ship_h_2.png')
+#     ship3 = load_image('images/ship_h_3.png')
+#     ship4 = load_image('images/ship_h_4.png')
+#     ship5 = load_image('images/ship_h_5.png')
+#     return ship2, ship3, ship4, ship5
 
 
 class Ship(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = load_image('images/ship_h_five.png')
+        self.image = choose_ship()
         self.rect = self.image.get_rect(midbottom=(400, 400))
 
     def move_ship(self):
@@ -88,17 +105,22 @@ game_name_rect = game_name.get_rect(center=(400, 25))
 side_display_text = side_font.render('Remaining ships', False, (0, 0, 0))
 side_display_text_rect = side_display_text.get_rect(center=(750, 105))
 # Ship variables
-h_ship_two, h_ship_three, h_ship_four, h_ship_five = load_ships()
+# h_ship_two, h_ship_three, h_ship_four, h_ship_five = load_ships()
 ship = pygame.sprite.GroupSingle()
 ship.add(Ship())
 missiles = pygame.sprite.Group()
 missiles.add(Missile())
+# Setting up a UI to get user input for difficulty
+options = [Option("2 Squares", (100,105)), Option("3 Squares", (200, 205))]
 
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
+        else:
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                game_active = True
 
     if game_active:
         screen.blit(background, (0, 0))
