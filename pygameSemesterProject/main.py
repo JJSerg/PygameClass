@@ -12,10 +12,6 @@ def get_player_difficulty():
         get_player_difficulty()
 
 
-def set_difficulty(num):
-    num = get_player_difficulty()
-
-
 def choose_ship():
     return load_image(f'images/ship_h_{get_player_difficulty()}.png')
 
@@ -25,13 +21,11 @@ def load_image(image_name):
     return image
 
 
-# for now this only loads horizontal ships
-# def load_ships():
-#     ship2 = load_image('images/ship_h_2.png')
-#     ship3 = load_image('images/ship_h_3.png')
-#     ship4 = load_image('images/ship_h_4.png')
-#     ship5 = load_image('images/ship_h_5.png')
-#     return ship2, ship3, ship4, ship5
+def collision():
+    if pygame.sprite.spritecollide(ship.sprite, missiles.sprites(), False):
+        return False
+    else:
+        return True
 
 
 class Ship(pygame.sprite.Sprite):
@@ -83,26 +77,19 @@ class Missile(pygame.sprite.Sprite):
             self.kill()
 
 
-def collision():
-    if pygame.sprite.spritecollide(ship.sprite, missiles.sprites(), False):
-        return False
-    else:
-        return True
-
-
 pygame.init()
 screen = pygame.display.set_mode((800, 600))
 pygame.display.set_caption('Battleship Game')
 clock = pygame.time.Clock()
-game_active = True
+game_active = False
 background = load_image('images/BG.png')
 header_font = pygame.font.SysFont('blackadderitc', 25)
 side_font = pygame.font.SysFont('timesnewroman', 10)
 # Create a variable to edit the header area text
-game_name = header_font.render('A battleship game', False, (0, 0, 0))
+game_name = header_font.render('A battleship game', True, (0, 0, 0))
 game_name_rect = game_name.get_rect(center=(400, 25))
 # create a variable to hold the right side display text
-side_display_text = side_font.render('Remaining ships', False, (0, 0, 0))
+side_display_text = side_font.render('Remaining ships', True, (0, 0, 0))
 side_display_text_rect = side_display_text.get_rect(center=(750, 105))
 # Ship variables
 # h_ship_two, h_ship_three, h_ship_four, h_ship_five = load_ships()
@@ -111,9 +98,20 @@ ship.add(Ship())
 missiles = pygame.sprite.Group()
 missiles.add(Missile())
 # Setting up a UI to get user input for difficulty
-options = [Option("2 Squares", (100,105)), Option("3 Squares", (200, 205))]
+menu_text = header_font.render('Press space bar to start the game after choosing a ship size', True, (0, 0, 0))
+menu_text_rect = menu_text.get_rect(center=(400, 300))
+ship_size_2_button = header_font.render('2 Squares', True, (0, 0, 0))
+ship_size_2_button_rect = ship_size_2_button.get_rect(center=(200, 450))
+ship_size_3_button = header_font.render('3 Squares', True, (0, 0, 0))
+ship_size_3_button_rect = ship_size_2_button.get_rect(center=(300, 450))
+ship_size_4_button = header_font.render('4 Squares', True, (0, 0, 0))
+ship_size_4_button_rect = ship_size_2_button.get_rect(center=(400, 450))
+ship_size_5_button = header_font.render('5 Squares', True, (0, 0, 0))
+ship_size_5_button_rect = ship_size_2_button.get_rect(center=(500, 450))
+
 
 while True:
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -131,6 +129,13 @@ while True:
         missiles.draw(screen)
         missiles.update()
         game_active = collision()
+    else:
+        screen.fill((255, 255, 255))
+        screen.blit(menu_text, menu_text_rect)
+        screen.blit(ship_size_2_button, ship_size_2_button_rect)
+        screen.blit(ship_size_3_button, ship_size_3_button_rect)
+        screen.blit(ship_size_4_button, ship_size_4_button_rect)
+        screen.blit(ship_size_5_button, ship_size_5_button_rect)
 
     pygame.display.update()
     clock.tick(60)
