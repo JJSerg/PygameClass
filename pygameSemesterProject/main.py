@@ -103,11 +103,11 @@ menu_text_rect = menu_text.get_rect(center=(400, 300))
 ship_size_2_button = header_font.render('2 Squares', True, (0, 0, 0))
 ship_size_2_button_rect = ship_size_2_button.get_rect(center=(200, 450))
 ship_size_3_button = header_font.render('3 Squares', True, (0, 0, 0))
-ship_size_3_button_rect = ship_size_2_button.get_rect(center=(300, 450))
+ship_size_3_button_rect = ship_size_2_button.get_rect(center=(350, 450))
 ship_size_4_button = header_font.render('4 Squares', True, (0, 0, 0))
-ship_size_4_button_rect = ship_size_2_button.get_rect(center=(400, 450))
+ship_size_4_button_rect = ship_size_2_button.get_rect(center=(500, 450))
 ship_size_5_button = header_font.render('5 Squares', True, (0, 0, 0))
-ship_size_5_button_rect = ship_size_2_button.get_rect(center=(500, 450))
+ship_size_5_button_rect = ship_size_2_button.get_rect(center=(650, 450))
 
 
 while True:
