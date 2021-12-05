@@ -62,7 +62,7 @@ class Missile(pygame.sprite.Sprite):
         super().__init__()
         self.image = load_image('images/Missile_1_Flying_000.png')
         self.image = pygame.transform.rotate(self.image, 270)
-        self.image = pygame.transform.scale(self.image, (150, 45))
+        self.image = pygame.transform.scale(self.image, (100, 30))
         self.rect = self.image.get_rect(topleft=(0, randrange(50, 600)))
 
     def fire_missile(self):
