@@ -1,3 +1,4 @@
+import random
 from random import randrange
 
 import pygame
@@ -27,29 +28,32 @@ def collision():
     else:
         return True
 
+# def get_menu_choice():
+#     if pygame.mouse.get_pos ==
+
 
 class Ship(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = choose_ship()
+        self.image = load_image('images/ship_h_2.png')
         self.rect = self.image.get_rect(midbottom=(400, 400))
 
     def move_ship(self):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT] or keys[pygame.K_a]:
-            self.rect.x -= 2
+            self.rect.x -= 4
             if self.rect.left < 0:
                 self.rect.left = 0
         elif keys[pygame.K_RIGHT] or keys[pygame.K_d]:
-            self.rect.x += 2
+            self.rect.x += 4
             if self.rect.right > 700:
                 self.rect.right = 700
         elif keys[pygame.K_UP] or keys[pygame.K_w]:
-            self.rect.y -= 2
+            self.rect.y -= 4
             if self.rect.top < 50:
                 self.rect.top = 50
         elif keys[pygame.K_DOWN] or keys[pygame.K_s]:
-            self.rect.y += 2
+            self.rect.y += 4
             if self.rect.bottom > 600:
                 self.rect.bottom = 600
 
@@ -66,7 +70,7 @@ class Missile(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(topleft=(0, randrange(50, 600)))
 
     def fire_missile(self):
-        self.rect.x += 1
+        self.rect.x += random.randint(1, 10)
 
     def update(self):
         self.fire_missile()
@@ -79,6 +83,7 @@ class Missile(pygame.sprite.Sprite):
 
 pygame.init()
 screen = pygame.display.set_mode((800, 600))
+
 pygame.display.set_caption('Battleship Game')
 clock = pygame.time.Clock()
 game_active = False
@@ -92,22 +97,14 @@ game_name_rect = game_name.get_rect(center=(400, 25))
 side_display_text = side_font.render('Remaining ships', True, (0, 0, 0))
 side_display_text_rect = side_display_text.get_rect(center=(750, 105))
 # Ship variables
-# h_ship_two, h_ship_three, h_ship_four, h_ship_five = load_ships()
 ship = pygame.sprite.GroupSingle()
 ship.add(Ship())
+# Creating missiles, then adding them to a sprite group.
 missiles = pygame.sprite.Group()
 missiles.add(Missile())
 # Setting up a UI to get user input for difficulty
-menu_text = header_font.render('Press space bar to start the game after choosing a ship size', True, (0, 0, 0))
+menu_text = header_font.render('Press space bar to start the game.', True, (0, 0, 0))
 menu_text_rect = menu_text.get_rect(center=(400, 300))
-ship_size_2_button = header_font.render('2 Squares', True, (0, 0, 0))
-ship_size_2_button_rect = ship_size_2_button.get_rect(center=(200, 450))
-ship_size_3_button = header_font.render('3 Squares', True, (0, 0, 0))
-ship_size_3_button_rect = ship_size_2_button.get_rect(center=(350, 450))
-ship_size_4_button = header_font.render('4 Squares', True, (0, 0, 0))
-ship_size_4_button_rect = ship_size_2_button.get_rect(center=(500, 450))
-ship_size_5_button = header_font.render('5 Squares', True, (0, 0, 0))
-ship_size_5_button_rect = ship_size_2_button.get_rect(center=(650, 450))
 
 
 while True:
@@ -126,16 +123,15 @@ while True:
         screen.blit(side_display_text, side_display_text_rect)
         ship.draw(screen)
         ship.update()
+        if int(len(missiles)) < 10:
+            missiles.add(Missile())
         missiles.draw(screen)
         missiles.update()
         game_active = collision()
     else:
         screen.fill((255, 255, 255))
         screen.blit(menu_text, menu_text_rect)
-        screen.blit(ship_size_2_button, ship_size_2_button_rect)
-        screen.blit(ship_size_3_button, ship_size_3_button_rect)
-        screen.blit(ship_size_4_button, ship_size_4_button_rect)
-        screen.blit(ship_size_5_button, ship_size_5_button_rect)
+        missiles.remove(missiles)
 
     pygame.display.update()
     clock.tick(60)
