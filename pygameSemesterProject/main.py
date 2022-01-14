@@ -13,10 +13,6 @@ def get_player_difficulty():
         get_player_difficulty()
 
 
-def choose_ship():
-    return load_image(f'images/ship_h_{get_player_difficulty()}.png')
-
-
 def load_image(image_name):
     image = pygame.image.load(f'{image_name}').convert_alpha()
     return image
@@ -28,8 +24,11 @@ def collision():
     else:
         return True
 
-# def get_menu_choice():
-#     if pygame.mouse.get_pos ==
+
+def display_missiles_spawned(missiles_spawned):
+    side_display_text = side_font.render(f'Missiles dodged {missiles_spawned}', True, (0, 0, 0))
+    side_display_text_rect = side_display_text.get_rect(center=(750, 105))
+    screen.blit(side_display_text, side_display_text_rect)
 
 
 class Ship(pygame.sprite.Sprite):
@@ -83,7 +82,7 @@ class Missile(pygame.sprite.Sprite):
 
 pygame.init()
 screen = pygame.display.set_mode((800, 600))
-
+missiles_spawned = 0
 pygame.display.set_caption('Battleship Game')
 clock = pygame.time.Clock()
 game_active = False
@@ -93,9 +92,6 @@ side_font = pygame.font.SysFont('timesnewroman', 10)
 # Create a variable to edit the header area text
 game_name = header_font.render('A battleship game', True, (0, 0, 0))
 game_name_rect = game_name.get_rect(center=(400, 25))
-# create a variable to hold the right side display text
-side_display_text = side_font.render('Remaining ships', True, (0, 0, 0))
-side_display_text_rect = side_display_text.get_rect(center=(750, 105))
 # Ship variables
 ship = pygame.sprite.GroupSingle()
 ship.add(Ship())
@@ -116,21 +112,24 @@ while True:
         else:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 game_active = True
+                missiles_spawned = 0
 
     if game_active:
         screen.blit(background, (0, 0))
         screen.blit(game_name, game_name_rect)
-        screen.blit(side_display_text, side_display_text_rect)
+        display_missiles_spawned(missiles_spawned)
         ship.draw(screen)
         ship.update()
         if int(len(missiles)) < 10:
             missiles.add(Missile())
+            missiles_spawned += 1
         missiles.draw(screen)
         missiles.update()
         game_active = collision()
     else:
         screen.fill((255, 255, 255))
         screen.blit(menu_text, menu_text_rect)
+        display_missiles_spawned(missiles_spawned)
         missiles.remove(missiles)
 
     pygame.display.update()
