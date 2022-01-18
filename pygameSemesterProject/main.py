@@ -61,6 +61,7 @@ class Ship(pygame.sprite.Sprite):
     def update(self):
         self.move_ship()
 
+
 # Missile base class
 class Missile(pygame.sprite.Sprite):
     def __init__(self):
@@ -110,10 +111,7 @@ missiles.add(Missile())
 # Setting up a UI to get user input for difficulty
 menu_text = header_font.render('Press space bar to start the game.', True, (0, 0, 0))
 menu_text_rect = menu_text.get_rect(center=(400, 300))
-
-
 while True:
-
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
