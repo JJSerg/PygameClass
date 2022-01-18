@@ -4,14 +4,6 @@ from random import randrange
 import pygame
 
 
-def get_player_difficulty():
-    choice = int(input('Please choose a ship size:'))
-    if 2 <= choice <= 5:
-        return choice
-    else:
-        print('invalid choice')
-        get_player_difficulty()
-
 
 def load_image(image_name):
     image = pygame.image.load(f'{image_name}').convert_alpha()
